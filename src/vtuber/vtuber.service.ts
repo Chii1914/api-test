@@ -31,7 +31,7 @@ export class VtuberService {
   }
 
   async update(id: number, updateVtuberDto: UpdateVtuberDto) {
-    return `This action updates a #${id} vtuber`;
+    return await this.vtuberRepository.update(id, updateVtuberDto);
   }
 
   async remove(id: number) {
