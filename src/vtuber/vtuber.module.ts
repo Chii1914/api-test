@@ -5,7 +5,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Vtuber } from './entities/vtuber.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Vtuber])],
+  imports: [
+    TypeOrmModule.forFeature([Vtuber]),
+  ],
   controllers: [VtuberController],
   providers: [VtuberService],
 })

@@ -1,6 +1,10 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
 import { VtuberModule } from './vtuber/vtuber.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { LoggerMiddleware } from './common/middleware/logger.middleware';
+// Removed MailerService import since it's not needed here
+import { MailerModule } from './mailer/mailer.module';
+import { DockModule } from './dock/dock.module';
 
 @Module({
   imports: [
@@ -12,11 +16,18 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       username: 'root',
       password: '',
       database: 'vtuber',
-      autoLoadEntities: true, //Carga las entidades de forma automática
-      synchronize: true, //CUIDADO CON ESTO EN PRODUCCIÓN
+      autoLoadEntities: true, // Automatically loads entities
+      synchronize: true, // BE CAREFUL WITH THIS IN PRODUCTION
     }),
+    MailerModule, // MailerModule imported here is enough
+    DockModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [], // Removed MailerService from here
 })
-export class AppModule {}
+
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(LoggerMiddleware).forRoutes({ path: '/a/vtuber', method: RequestMethod.GET });
+  }
+}

@@ -31,4 +31,9 @@ export class VtuberController {
   remove(@Param('id') id: string) {
     return this.vtuberService.remove(+id);
   }
+  @Post('send-email')
+  sendWelcomeEmail(@Body('email') email: string) {
+    return this.vtuberService.sendWelcomeEmail(email);
+  }
+
 }

@@ -1,16 +1,17 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Vtuber } from './entities/vtuber.entity';
+import { MailerService } from '../mailer/mailer.service';
 import { CreateVtuberDto } from './dto/create-vtuber.dto';
 import { UpdateVtuberDto } from './dto/update-vtuber.dto';
-import { Repository } from 'typeorm';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Vtuber } from './entities/vtuber.entity';
 
 @Injectable()
 export class VtuberService {
 
   constructor(
-    @InjectRepository(Vtuber)                   //Se accede a todos los métodos del repositorio
-    private vtuberRepository: Repository<Vtuber>
+    @InjectRepository(Vtuber) private vtuberRepository: Repository<Vtuber>,
+    private mailerService: MailerService,
   ) { }
 
   async create(createVtuberDto: CreateVtuberDto) {
@@ -38,4 +39,20 @@ export class VtuberService {
     return await this.vtuberRepository.softDelete({id}); //SE LE PASA EL ID Se va al elemento, y le pone una fecha al elemento, luego cuando listemos los datos, no se devuelven 
     //return await this.vtuberRepository.delete({id}); Se le pasa la instancia del objeto mwajaja
   }
+
+  async sendWelcomeEmail(email: string){
+    await this.mailerService.sendMail(email, 'Bienvenido', 'Bienvenido a la plataforma');
+  }
+  
+  
+  //@Post()
+  //async sendMail(@Body () emailDto: EmailDto) {
+  //  await this.mailerService.sendMail(emailDto.to, emailDto.subject, emailDto.text, emailDto.html);
+  //  return {message: 'Email enviado'};
+  //}
+
+  
+
+
 }
+
