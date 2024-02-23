@@ -6,4 +6,7 @@ import { DockController } from './dock.controller';
   controllers: [DockController],
   providers: [DockService],
 })
-export class DockModule {}
+export class DockModule {
+
+  
+}
